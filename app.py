@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from marshmallow import post_load, fields, ValidationError
 from dotenv import load_dotenv
 from os import environ
 
@@ -34,9 +35,13 @@ class Song(db.Model):
     def __repr__(self):
         return f"{self.title} {self.artist} {self.album} {self.release_date} {self.genre}"
 
-
 # Schemas
+class SongSchema(ma.Schema):
+    class Meta:
+        fields = ("title", "artist", "album", "release_date", "genre")
 
+song_schema = SongSchema()
+songs_schema = SongSchema(many = True)
 
 
 # Resources
