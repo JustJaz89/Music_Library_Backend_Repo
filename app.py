@@ -90,6 +90,11 @@ class SongResource(Resource):
             song_from_db.genre = request.json["genre"]
         db.session.commit()
         return song_schema.dump(song_from_db), 200
+    
+    def delete(self, song_id):
+        song_from_db = Song.query.get_or_404(song_id)
+        db.session.delete(song_from_db)
+        return "", 204
 
 # Routes
 api.add_resource(SongListResource, "/api/songs")
