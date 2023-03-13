@@ -71,6 +71,11 @@ class SongListResource(Resource):
         except ValidationError as err:
             return err.messages, 400
 
+class SongResource(Resource):
+    def get(self, song_id):
+        song_from_db = Song.query.get_or_404(song_id)
+        return song_schema.dump(song_from_db), 200
 
 # Routes
 api.add_resource(SongListResource, "/api/songs")
+api.add_resource(SongResource, "/api/songs/<int:song_id>")
