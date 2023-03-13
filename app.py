@@ -56,7 +56,11 @@ songs_schema = SongSchema(many = True)
 
 
 # Resources
-
+class SongListResource(Resource):
+    def get(self):
+        all_songs = Song.query.all()
+        return songs_schema.dump(all_songs)
 
 
 # Routes
+api.add_resource(SongListResource, "/api/songs")
