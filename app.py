@@ -29,11 +29,13 @@ class Song(db.Model):
     title = db.Column(db.String(255), nullable = False)
     artist = db.Column(db.String(255), nullable = False)
     album = db.Column(db.String(255), nullable = False)
-    release_date = db.Column(db.Date)
     genre = db.Column(db.String(255), nullable = False)
+    release_date = db.Column(db.Date)
+    running_time = db.Column(db.Float)
+    
 
     def __repr__(self):
-        return f"{self.title} {self.artist} {self.album} {self.release_date} {self.genre}"
+        return f"{self.title} {self.artist} {self.album} {self.genre} {self.release_date} {self.running_time}"
 
 # Schemas
 class SongSchema(ma.Schema):
@@ -41,11 +43,13 @@ class SongSchema(ma.Schema):
     title = fields.String(required = True)
     artist = fields.String(required = True)
     album = fields.String(required = True)
-    release_date = fields.Date()
     genre = fields.String(required = True)
+    release_date = fields.Date()
+    running_time = fields.Float()
+    
 
     class Meta:
-        fields = ("title", "artist", "album", "release_date", "genre")
+        fields = ("title", "artist", "album", "genre", "release_date", "running_time")
 
     @post_load
     def create_song(self, data, **kwargs):
@@ -84,10 +88,12 @@ class SongResource(Resource):
             song_from_db.artist = request.json["artist"]
         if "album" in request.json:
             song_from_db.album = request.json["album"]
-        if "release_date" in request.json:
-            song_from_db.release_date = request.json["release_date"]
         if "genre" in request.json:
             song_from_db.genre = request.json["genre"]
+        if "release_date" in request.json:
+            song_from_db.release_date = request.json["release_date"]
+        if "running_time" in request.json:
+            song_from_db.running_time = request.json["running_time"]
         db.session.commit()
         return song_schema.dump(song_from_db), 200
     
